@@ -1,4 +1,4 @@
 instagrio-hd
 ============
 
-instagrio HD - instagram HD viewer for webOS TouchPad
+instagrio HD - instagram viewer for webOS TouchPad
