@@ -1,0 +1,35 @@
+.connectBtn {
+    width: 222px;
+    height: 86px;
+    margin-top: -43px;
+    margin-left: -111px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    text-indent: -9999px;
+    display: block;
+    outline: none;
+    text-decoration: none;
+    background: transparent url("images/connect_via_instagram_button.png") no-repeat 0 0;
+}
+
+/*why not work? curious*/
+.connectBtn:active {
+  backgroundPosition: 0 -86px;
+}
+
+.newness-carousel {
+			height: 33%;
+			width: 33%;
+			min-height: 320px;
+			min-width: 320px;
+			display: inline-block;
+			margin: 0px;
+			border: 0px solid orange;
+}
+
+.newness-carousel > * {
+			border: 0px solid #333;
+			font-size: 5em;
+			text-align: center;
+}	

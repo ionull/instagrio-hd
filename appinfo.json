@@ -1,0 +1,11 @@
+{
+	"title": "instagrio HD",
+		"type": "web",
+		"main": "index.html",
+		"icon": "icon64.png",
+		"id": "bz.tsung.hd.instagrio",
+		"version": "1.0.0",
+		"vendor": "Tsung W.",
+		"uiRevision": 2,
+		"plug-ins": false
+}

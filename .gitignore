@@ -12,3 +12,5 @@ doc/app
 *.ipk
 bin/*.ipk
 *Thumbs.db
+enyo/*
+lib/*
