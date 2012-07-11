@@ -9,9 +9,8 @@ enyo.kind({
 		this.items = [];
 		this.origItems = [];
 		this.fetch('HOT');
-		//this.$.mediaList.renderViews(5);
-		//this.index = 1;
 		this.index = 0;
+		this.onTinyItemHandler = this.onTinyItemTap.bind(this);
 	},
 	fetch: function(which) {
 		var callbacks = {
@@ -40,7 +39,6 @@ enyo.kind({
 	onSuccess: function(result) {
 		var that = this;
 		enyo.log('media list get success');
-		//this.$.mediaList.renderViews(0);
 		var json = result.responseJSON;
 		this.onResult(json);
 	},
@@ -61,19 +59,37 @@ enyo.kind({
 	components: [{
 		name: 'mediaList',
 		kind: 'newness.Carousel',
-		style: 'vertical-align: middle;',
 		fit: true,
 		onGetLeft: 'getLeft',
 		onGetRight: 'getRight',
 		style: "width:100%;height:100%;background: gray;"
+			/*
+	}, {
+		name: 'photoGallery',
+		kind: 'enyo.ImageView',
+		style: 'width: 100%;height: 100%;background: black;'
+		*/
 	}],
+	onTinyItemTap: function(inSender, inEvent) {
+		enyo.log('onTinyItemTap');
+		if(inSender.item) {
+			enyo.log(JSON.stringify(inSender.item.images));
+			//this.$.mediaList.hide();
+			//this.$.photoGallery.show();
+			//var url = inSender.item.images['standard_resolution']['url'];
+			var url = inSender.item.link;
+			//document.location.href = url;
+			window.open(url, '_blank');
+		}
+	},
 	getView: function(index, left) {
 		var that = this;
 		enyo.log('getView ' + index + left);
 		if (this.items && this.items.length > index && index >= 0) {
 			return {
 				kind: 'io.TinyGrid',
-				items: this.items[index]
+				items: this.items[index],
+				onItemTap: that.onTinyItemHandler
 			}
 		} else {
 			if (index < 0) {
@@ -133,25 +149,6 @@ enyo.kind({
 	},
 	noData: function() {
 		return this.items && this.items.length == 0;
-	},
-	/*
-	components: [{
-		name: 'mediaList',
-		kind: 'newness.FlyweightCarousel',
-		fit: true,
-		onSetupView: 'setupView'
-	}],
-	*/
-	setupView: function(inSender, inEvent) {
-		enyo.log('onSetupView: ' + inEvent.viewIndex);
-		//inEvent.originator.setContent(inEvent.viewIndex);
-		inEvent.originator.setContent('what');
-		enyo.log('onSetupView: end ');
-		return true;
-		if (inEvent.viewIndex >= 0 && inEvent.viewIndex < this.items.length) {
-			inEvent.originator.setHeader('Hello! ' + inEvent.viewIndex);
-			return true;
-		}
 	}
 });
 

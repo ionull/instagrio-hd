@@ -60,7 +60,7 @@ enyo.kind({
 		var redirectUri = 'http://instagrio.tsung.bz/token';
 		var url = 'https://api.instagram.com/oauth/authorize/?client_id=' + clientID + '&redirect_uri=' + redirectUri + '&response_type=code&scope=likes+comments+relationships';
 		enyo.log('opening url: ' + url);
-		document.location.href = url;
+		window.open(url, '_blank');
 		
 		//now waiting for user to input passcode
 		new io.OAuthPasscode().renderInto(document.body);
