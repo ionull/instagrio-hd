@@ -8,7 +8,7 @@ enyo.kind({
 		this.inherited(arguments);
 		this.items = [];
 		this.origItems = [];
-		this.fetch('hot');
+		this.fetch('HOT');
 		//this.$.mediaList.renderViews(5);
 		//this.index = 1;
 		this.index = 0;
@@ -21,17 +21,19 @@ enyo.kind({
 			}.bind(this)
 		};
 		switch (which) {
-		case 'home':
+		case 'HOME':
 			Global.instagram.getUsersFeed(callbacks);
 			break;
-		case 'hot':
+		case 'HOT':
 			Global.instagram.getMediaPopular(callbacks);
 			break;
-		case 'mine':
+		case 'MINE':
 			Global.instagram.getUsersMediaRecentSelf(callbacks);
 			break;
-		case 'liked':
+		case 'LIKED':
 			Global.instagram.getUsersMediaLiked(callbacks);
+			break;
+		default:
 			break;
 		}
 	},
@@ -51,6 +53,7 @@ enyo.kind({
 			}
 			this.items = new io.TinyArray(jsonData).getTinyArray();
 			enyo.log('after get tiny array: ' + this.items.length);
+			this.index = 0;
 			this.$.mediaList.setCenterView(this.getView(this.index, 'center'));
 
 		}
@@ -65,6 +68,7 @@ enyo.kind({
 		style: "width:100%;height:100%;background: gray;"
 	}],
 	getView: function(index, left) {
+		var that = this;
 		enyo.log('getView ' + index + left);
 		if (this.items && this.items.length > index && index >= 0) {
 			return {
@@ -72,22 +76,26 @@ enyo.kind({
 				items: this.items[index]
 			}
 		} else {
-			if(index < 0) {
+			if (index < 0) {
 				//show switch
-			return {
-				content: 'HOME'
-			};
+				return {
+					kind: 'io.QuickLaunch',
+					onItemTap: function(inSender, inEvent) {
+						that.fetch(inSender.content);
+						that.$.mediaList.next();
+					}
+				};
 			} else {
 				//show load more or anything else
-			return {
-				content: 'NEXT'
-			};
+				return {
+					content: 'NEXT'
+				};
 			}
 		}
 	},
 	getLeft: function(inSender, inEvent) {
 		enyo.log('getLeft ' + this.index);
-		if(inEvent.snap) {
+		if (inEvent.snap) {
 			enyo.log('snap-->');
 		}
 		if (this.noData()) {
@@ -95,7 +103,7 @@ enyo.kind({
 			return false;
 		}
 		inEvent.snap && this.index--;
-		if(this.index == -1) {
+		if (this.index == - 1) {
 			this.index = 0;
 			return false;
 		}
@@ -104,10 +112,10 @@ enyo.kind({
 	},
 	getRight: function(inSender, inEvent) {
 		enyo.log('getRight ' + this.index);
-		if(inEvent.snap) {
+		if (inEvent.snap) {
 			enyo.log('snap-->');
 		}
-		if(this.index == this.items.length - 1) {
+		if (this.index == this.items.length - 1) {
 			return false;
 		}
 		if (this.noData()) {
