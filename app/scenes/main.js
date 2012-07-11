@@ -7,9 +7,11 @@ enyo.kind({
 		enyo.log('on main create');
 		this.inherited(arguments);
 		this.items = [];
+		this.origItems = [];
 		this.fetch('hot');
 		//this.$.mediaList.renderViews(5);
-		this.index = 1;
+		//this.index = 1;
+		this.index = 0;
 	},
 	fetch: function(which) {
 		var callbacks = {
@@ -49,12 +51,8 @@ enyo.kind({
 			}
 			this.items = new io.TinyArray(jsonData).getTinyArray();
 			enyo.log('after get tiny array: ' + this.items.length);
-			this.$.mediaList.setCenterView(this.getView(1));
+			this.$.mediaList.setCenterView(this.getView(this.index, 'center'));
 
-			setTimeout(function() {
-				that.$.mediaList.previous();
-			},
-			50);
 		}
 	},
 	components: [{
@@ -66,31 +64,58 @@ enyo.kind({
 		onGetRight: 'getRight',
 		style: "width:100%;height:100%;background: gray;"
 	}],
-	getView: function(index) {
-		enyo.log('getView ' + index);
+	getView: function(index, left) {
+		enyo.log('getView ' + index + left);
 		if (this.items && this.items.length > index && index >= 0) {
 			return {
 				kind: 'io.TinyGrid',
 				items: this.items[index]
 			}
 		} else {
+			if(index < 0) {
+				//show switch
 			return {
-				content: this.items[index]
+				content: 'HOME'
 			};
+			} else {
+				//show load more or anything else
+			return {
+				content: 'NEXT'
+			};
+			}
 		}
 	},
 	getLeft: function(inSender, inEvent) {
-		//enyo.log('getLeft ' + this.index);
+		enyo.log('getLeft ' + this.index);
+		if(inEvent.snap) {
+			enyo.log('snap-->');
+		}
 		if (this.noData()) {
-			this.$.mediaList.newView(inEvent.originator, this.loading);
+			this.$.mediaList.newView(inEvent.originator, this.loading());
 			return false;
 		}
 		inEvent.snap && this.index--;
-		if (this.index < 0) {
+		if(this.index == -1) {
 			this.index = 0;
 			return false;
 		}
-		this.$.mediaList.newView(inEvent.originator, this.getView(this.index));
+		this.$.mediaList.newView(inEvent.originator, this.getView(this.index - 1, 'left'));
+		return true;
+	},
+	getRight: function(inSender, inEvent) {
+		enyo.log('getRight ' + this.index);
+		if(inEvent.snap) {
+			enyo.log('snap-->');
+		}
+		if(this.index == this.items.length - 1) {
+			return false;
+		}
+		if (this.noData()) {
+			this.$.mediaList.newView(inEvent.originator, this.loading());
+			return false;
+		}
+		inEvent.snap && this.index++;
+		this.$.mediaList.newView(inEvent.originator, this.getView(this.index + 1, 'right'));
 		return true;
 	},
 	loading: function() {
@@ -100,20 +125,6 @@ enyo.kind({
 	},
 	noData: function() {
 		return this.items && this.items.length == 0;
-	},
-	getRight: function(inSender, inEvent) {
-		//enyo.log('getRight ' + this.index);
-		if (this.noData()) {
-			this.$.mediaList.newView(inEvent.originator, this.loading);
-			return false;
-		}
-		inEvent.snap && this.index++;
-		if (this.items && this.items.length <= this.index) {
-			this.index = this.items.length;
-			return false;
-		}
-		this.$.mediaList.newView(inEvent.originator, this.getView(this.index));
-		return true;
 	},
 	/*
 	components: [{

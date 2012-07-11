@@ -7,6 +7,16 @@ enyo.kind({
 		this.inherited(arguments);
 		this.renderItems(this.items);
 	},
+	onItemHold: function() {
+		enyo.log('onItemHold');
+	},
+	onItemTap: function(inSender, inEvent) {
+		enyo.log('onItemTap');
+		if(inSender.item) {
+			enyo.log(JSON.stringify(inSender.item.images));
+			document.location.href = inSender.item.images['standard_resolution']['url'];
+		}
+	},
 	renderItems: function(items) {
 		if (items) {
 			enyo.log('setItems' + items.length);
@@ -15,18 +25,22 @@ enyo.kind({
 				this.createComponents([{
 					kind:
 					'io.Tiny4Img',
+					item: items[0],
 					src: items[0].images.low_resolution.url
 				},
 				{
 					kind: 'io.Tiny4Img',
+					item: items[1],
 					src: items[1].images.low_resolution.url
 				},
 				{
 					kind: 'io.Tiny4Img',
+					item: items[2],
 					src: items[2].images.low_resolution.url
 				},
 				{
 					kind: 'io.Tiny4Img',
+					item: items[3],
 					src: items[3].images.low_resolution.url
 				}]);
 				break;
@@ -34,14 +48,17 @@ enyo.kind({
 				this.createComponents([{
 					kind:
 					'io.Tiny4Img',
+					item: items[0],
 					src: items[0].images.low_resolution.url
 				},
 				{
 					kind: 'io.Tiny4Img',
+					item: items[1],
 					src: items[1].images.low_resolution.url
 				},
 				{
 					kind: 'io.TinyH2Img',
+					item: items[2],
 					src: items[2].images.standard_resolution.url
 				}]);
 				break;
@@ -49,10 +66,12 @@ enyo.kind({
 				this.createComponents([{
 					kind:
 					'io.TinyV2Img',
+					item: items[0],
 					src: items[0].images.standard_resolution.url
 				},
 				{
 					kind: 'io.TinyV2Img',
+					item: items[1],
 					src: items[1].images.standard_resolution.url
 				}]);
 				break;
@@ -60,28 +79,33 @@ enyo.kind({
 				this.createComponent({
 					kind:
 					'io.Tiny1Img',
+					item: items[0],
 					src: items[0].images.standard_resolution.url
 				});
 				break;
 			default:
 				return;
 			}
-			/*
-			this.createComponent({
-				tag: 'div',
-				style: 'clear: both;'
-			});
-			*/
 		}
 	}
 });
 
 enyo.kind({
+	name: 'io.TinyImg',
+	tag: 'img',
+	content: '',
+	create: function() {
+		this.inherited(arguments);
+	},
+	ontap: 'onItemTap',
+	onMousehold: 'onItemHold'
+});
+
+enyo.kind({
 	name:
 	'io.Tiny4Img',
-	tag: 'img',
+	kind: 'io.TinyImg',
 	style: 'width: 50%;height:50%;float:left;background: blue;',
-	content: '',
 	create: function() {
 		this.inherited(arguments);
 	}
@@ -89,9 +113,8 @@ enyo.kind({
 
 enyo.kind({
 	name: 'io.TinyH2Img',
-	tag: 'img',
+	kind: 'io.TinyImg',
 	style: 'width: 100%;height:50%;float:left;background: red;',
-	content: '',
 	create: function() {
 		this.inherited(arguments);
 	}
@@ -99,9 +122,8 @@ enyo.kind({
 
 enyo.kind({
 	name: 'io.TinyV2Img',
-	tag: 'img',
+	kind: 'io.TinyImg',
 	style: 'width: 50%;height:100%;float:left;background: green;',
-	content: '',
 	create: function() {
 		this.inherited(arguments);
 	}
@@ -109,9 +131,8 @@ enyo.kind({
 
 enyo.kind({
 	name: 'io.Tiny1Img',
-	tag: 'img',
+	kind: 'io.TinyImg',
 	style: 'width: 100%;height:100%;float:left;background: black;',
-	content: '',
 	create: function() {
 		this.inherited(arguments);
 	}
