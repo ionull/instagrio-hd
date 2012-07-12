@@ -97,7 +97,7 @@ enyo.kind({
 				return {
 					kind: 'io.QuickLaunch',
 					onItemTap: function(inSender, inEvent) {
-						that.fetch(inSender.content);
+						that.fetch(inSender.item);
 						that.$.mediaList.next();
 					}
 				};

@@ -6,27 +6,30 @@ enyo.kind({
 	},
 	style: 'width: 100%;height: 100%',
 	components: [{
-		content: 'HOME',
+		item: 'HOME',
 		kind: 'io.QuickItem'
 	}, {
-		content: 'HOT',
+		item: 'HOT',
 		kind: 'io.QuickItem'
 	}, {
-		content: 'MINE',
+		item: 'MINE',
 		kind: 'io.QuickItem'
 	}, {
-		content: 'LIKED',
+		item: 'LIKED',
 		kind: 'io.QuickItem'
 	}]
 });
 
 enyo.kind({
 	name: 'io.QuickItem',
-	style: 'width: 50%;height: 50%;float: left;vertical-align: middle;',
+	tag: 'div',
+	content: '',
+	style: 'width: 50%;height: 50%;float: left;',
 	create: function() {
 		this.inherited(arguments);
+		enyo.log('on quick item create ' + this.item);
 		var color = 'red';
-		switch(this.content) {
+		switch(this.item) {
 			case 'HOME':
 				color = 'blue';
 				break;
@@ -43,6 +46,11 @@ enyo.kind({
 				break;
 		}
 		this.addStyles("background: " + color + ";");
+		this.createComponent({
+			tag: 'p',
+			content: this.item,
+			style: 'font-size: 64px;position:relative;right:10px;bottom:0px;text-align:right;color: white;'
+		});
 	},
 	ontap: 'onItemTap'
 });
