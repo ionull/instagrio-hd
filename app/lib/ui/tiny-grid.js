@@ -12,7 +12,7 @@ enyo.kind({
 	},
 	onItemTap: function(inSender, inEvent) {
 		enyo.log('onItemTap');
-		if(inSender.item) {
+		if (inSender.item) {
 			enyo.log(JSON.stringify(inSender.item.images));
 		}
 	},
@@ -21,65 +21,42 @@ enyo.kind({
 			enyo.log('setItems' + items.length);
 			switch (items.length) {
 			case 4:
-				this.createComponents([{
-					kind:
-					'io.Tiny4Img',
-					item: items[0],
-					src: items[0].images.low_resolution.url
-				},
-				{
-					kind: 'io.Tiny4Img',
-					item: items[1],
-					src: items[1].images.low_resolution.url
-				},
-				{
-					kind: 'io.Tiny4Img',
-					item: items[2],
-					src: items[2].images.low_resolution.url
-				},
-				{
-					kind: 'io.Tiny4Img',
-					item: items[3],
-					src: items[3].images.low_resolution.url
-				}]);
+				for (var img4 in items) {
+					this.createComponent({
+						kind: 'io.Tiny4Img',
+						item: items[img4]
+					});
+				};
 				break;
 			case 3:
 				this.createComponents([{
 					kind:
 					'io.Tiny4Img',
-					item: items[0],
-					src: items[0].images.low_resolution.url
+					item: items[0]
 				},
 				{
 					kind: 'io.Tiny4Img',
-					item: items[1],
-					src: items[1].images.low_resolution.url
+					item: items[1]
 				},
 				{
 					kind: 'io.TinyH2Img',
-					item: items[2],
-					src: items[2].images.standard_resolution.url
+					item: items[2]
 				}]);
 				break;
 			case 2:
-				this.createComponents([{
-					kind:
-					'io.TinyV2Img',
-					item: items[0],
-					src: items[0].images.standard_resolution.url
-				},
-				{
-					kind: 'io.TinyV2Img',
-					item: items[1],
-					src: items[1].images.standard_resolution.url
-				}]);
+				//random v or h
+				for (var img2 in items) {
+					this.createComponent({
+						kind: Math.random() > 0.5 ? 'io.TinyV2Img': 'io.TinyH2Img',
+						item: items[img2]
+					});
+				}
 				break;
 			case 1:
 				this.createComponent({
 					kind:
 					'io.Tiny1Img',
-					item: items[0],
-					src: items[0].images.standard_resolution.url
+					item: items[0]
 				});
 				break;
 			default:
@@ -90,51 +67,60 @@ enyo.kind({
 });
 
 enyo.kind({
-	name: 'io.TinyImg',
-	tag: 'img',
+	name:
+	'io.TinyImg',
 	content: '',
 	create: function() {
+		var resolution = this.item.images.standard_resolution;
+		if (this.small) {
+			this.src = this.item.images.low_resolution;
+		}
+		this.src = resolution.url;
 		this.inherited(arguments);
+		this.addStyles("float: left;overflow: hidden;");
+		var that = this;
+		var img = that.createComponent({
+				tag: 'img',
+				src: that.src
+		});
+		setTimeout(function() {
+			enyo.log('width: ' + that.hasNode().offsetWidth);
+			var allWidth = that.hasNode().offsetWidth;
+			var allHeight = that.hasNode().offsetHeight;
+			var w = allWidth > allHeight;
+			//TODO width and height are equal so just do it simple with(w ? allWidth: allHeight)
+			var style = (w ? 'width: 100%;': 'height:100%;') + 'vertical-align: middle;margin-top: ' + (allHeight - (w ? allWidth : allHeight))/2 + 'px;';
+			img.addStyles(style);
+		},
+		10);
 	},
 	ontap: 'onItemTap',
 	onMousehold: 'onItemHold'
 });
 
 enyo.kind({
-	name:
-	'io.Tiny4Img',
+	name: 'io.Tiny4Img',
 	kind: 'io.TinyImg',
-	style: 'width: 50%;height:50%;float:left;background: blue;',
-	create: function() {
-		this.inherited(arguments);
-	}
+	style: 'width: 50%;height:50%;background: blue;',
+	small: true
 });
 
 enyo.kind({
 	name: 'io.TinyH2Img',
 	kind: 'io.TinyImg',
-	style: 'width: 100%;height:50%;float:left;background: red;',
-	create: function() {
-		this.inherited(arguments);
-	}
+	style: 'width: 100%;height:50%;background: red;'
 });
 
 enyo.kind({
 	name: 'io.TinyV2Img',
 	kind: 'io.TinyImg',
-	style: 'width: 50%;height:100%;float:left;background: green;',
-	create: function() {
-		this.inherited(arguments);
-	}
+	style: 'width: 50%;height:100%;background: green;'
 });
 
 enyo.kind({
 	name: 'io.Tiny1Img',
 	kind: 'io.TinyImg',
-	style: 'width: 100%;height:100%;float:left;background: black;',
-	create: function() {
-		this.inherited(arguments);
-	}
+	style: 'width: 100%;height:100%;background: black;'
 });
 
 enyo.kind({
@@ -159,8 +145,7 @@ enyo.kind({
 			}
 			var tinyIndex = 0;
 			while (tinyIndex < tinyCount) {
-				tiny.push(items[i + tinyIndex]);
-				++tinyIndex;
+				tiny.push(items[i + tinyIndex]); ++tinyIndex;
 			}
 			i += tinyCount;
 			tinyArray.push(tiny);

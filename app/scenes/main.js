@@ -8,7 +8,7 @@ enyo.kind({
 		this.inherited(arguments);
 		this.items = [];
 		this.origItems = [];
-		this.fetch('HOT');
+		this.fetch('HOME');
 		this.index = 0;
 		this.onTinyItemHandler = this.onTinyItemTap.bind(this);
 	},
