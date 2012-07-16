@@ -70,10 +70,10 @@ enyo.kind({
 	name:
 	'io.TinyImg',
 	content: '',
-	onresize: 'onResized',
-	onResized: function() {
-		enyo.log('onResized------->' + this.hasNode().offsetWidth);
-	},
+	components: [{
+		kind: "Signals",
+		onresize: "resizeHandler"
+	}],
 	create: function() {
 		var resolution = this.item.images.standard_resolution;
 		if (this.small) {
@@ -87,20 +87,33 @@ enyo.kind({
 			tag: 'img',
 			src: that.src
 		});
+		this.imgCmp = img;
+
 		setTimeout(function() {
-			enyo.log('width: ' + that.hasNode().offsetWidth);
-			var allWidth = that.hasNode().offsetWidth;
-			var allHeight = that.hasNode().offsetHeight;
-			var w = allWidth > allHeight;
-			//TODO width and height are equal so just do it simple with(w ? allWidth: allHeight)
-			//TODO better border without ugly bounds
-			var style = (w ? 'width: 100%;': 'height:100%;') 
-				+ 'vertical-align: middle;margin-top: ' 
-				+ (allHeight - (w ? allWidth: allHeight)) / 2 + 'px;margin-left: '
-				+ (allWidth - (w ? allWidth: allHeight)) / 2 + 'px;';
-			img.addStyles(style);
+			that.setImage();
 		},
 		10);
+	},
+	resizeHandler: function() {
+		//this.inherited(arguments);
+		enyo.log('onResized------->' + (this.hasNode() ? this.hasNode().offsetWidth: ''));
+		if (this.hasNode()) {
+			this.setImage();
+		}
+	},
+	setImage: function() {
+		var that = this;
+		enyo.log('width: ' + that.hasNode().offsetWidth);
+		var allWidth = that.hasNode().offsetWidth;
+		var allHeight = that.hasNode().offsetHeight;
+		var w = allWidth > allHeight;
+		var larger = w ? allWidth: allHeight;
+		//TODO width and height are equal so just do it simple with(w ? allWidth: allHeight)
+		//TODO better border without ugly bounds
+		var style = 'width: ' + larger + 'px;height:' + larger + 'px;' 
+			+ 'vertical-align: middle;margin-top: ' + (allHeight - larger) / 2 
+			+ 'px;margin-left: ' + (allWidth - larger) / 2 + 'px;';
+		that.imgCmp.addStyles(style);
 	},
 	ontap: 'onItemTap',
 	onMousehold: 'onItemHold'
