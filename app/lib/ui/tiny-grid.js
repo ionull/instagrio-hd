@@ -93,7 +93,7 @@ enyo.kind({
 			var allHeight = that.hasNode().offsetHeight;
 			var w = allWidth > allHeight;
 			//TODO width and height are equal so just do it simple with(w ? allWidth: allHeight)
-			//TODO better border
+			//TODO better border without ugly bounds
 			var style = (w ? 'width: 100%;': 'height:100%;') 
 				+ 'vertical-align: middle;margin-top: ' 
 				+ (allHeight - (w ? allWidth: allHeight)) / 2 + 'px;margin-left: '
