@@ -70,6 +70,10 @@ enyo.kind({
 	name:
 	'io.TinyImg',
 	content: '',
+	onresize: 'onResized',
+	onResized: function() {
+		enyo.log('onResized------->' + this.hasNode().offsetWidth);
+	},
 	create: function() {
 		var resolution = this.item.images.standard_resolution;
 		if (this.small) {
@@ -80,8 +84,8 @@ enyo.kind({
 		this.addStyles("float: left;overflow: hidden;");
 		var that = this;
 		var img = that.createComponent({
-				tag: 'img',
-				src: that.src
+			tag: 'img',
+			src: that.src
 		});
 		setTimeout(function() {
 			enyo.log('width: ' + that.hasNode().offsetWidth);
@@ -89,7 +93,10 @@ enyo.kind({
 			var allHeight = that.hasNode().offsetHeight;
 			var w = allWidth > allHeight;
 			//TODO width and height are equal so just do it simple with(w ? allWidth: allHeight)
-			var style = (w ? 'width: 100%;': 'height:100%;') + 'vertical-align: middle;margin-top: ' + (allHeight - (w ? allWidth : allHeight))/2 + 'px;';
+			var style = (w ? 'width: 100%;': 'height:100%;') 
+				+ 'vertical-align: middle;margin-top: ' 
+				+ (allHeight - (w ? allWidth: allHeight)) / 2 + 'px;margin-left: '
+				+ (allWidth - (w ? allWidth: allHeight)) / 2 + 'px;';
 			img.addStyles(style);
 		},
 		10);
