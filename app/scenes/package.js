@@ -1,4 +1,5 @@
 enyo.depends(
-		"connect.js"
+		"connect.css"
+		,"connect.js"
 		,"main.js"
 );
