@@ -17,19 +17,3 @@
 .connectBtn:active {
   backgroundPosition: 0 -86px;
 }
-
-.newness-carousel {
-			height: 33%;
-			width: 33%;
-			min-height: 320px;
-			min-width: 320px;
-			display: inline-block;
-			margin: 0px;
-			border: 0px solid orange;
-}
-
-.newness-carousel > * {
-			border: 0px solid #333;
-			font-size: 5em;
-			text-align: center;
-}	

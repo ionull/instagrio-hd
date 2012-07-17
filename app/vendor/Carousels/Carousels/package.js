@@ -1,3 +1,5 @@
 enyo.depends(
-"newness.Carousels.js"
+		"newness.Carousels.js", 
+		"newness.Carousels.css"
 );
+
